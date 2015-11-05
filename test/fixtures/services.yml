@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: 
+  app_key: 
+  app_secret: 
+
+two:
+  name: 
+  app_key: 
+  app_secret: 

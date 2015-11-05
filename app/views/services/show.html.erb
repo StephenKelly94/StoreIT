@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @service.name %>
+</p>
+
+<p>
+  <strong>App key:</strong>
+  <%= @service.app_key %>
+</p>
+
+<p>
+  <strong>App secret:</strong>
+  <%= @service.app_secret %>
+</p>
+
+<%= link_to 'Edit', edit_service_path(@service) %> |
+<%= link_to 'Back', services_path %>
