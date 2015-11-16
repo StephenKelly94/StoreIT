@@ -1,1 +1,1 @@
-json.extract! @folder, :id, :name, :path, :created_at, :updated_at
+json.extract! @folder, :id, :name, :path, :user_files

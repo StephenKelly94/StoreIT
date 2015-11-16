@@ -4,7 +4,7 @@ class UserFilesController < ApplicationController
   # GET /user_files
   # GET /user_files.json
   def index
-    @user_files = UserFile.all
+    @folders = Folder.all
   end
 
   # GET /user_files/1
@@ -15,6 +15,7 @@ class UserFilesController < ApplicationController
   # GET /user_files/new
   def new
     @user_file = UserFile.new
+    @folders = Folder.all
   end
 
   # GET /user_files/1/edit
@@ -25,11 +26,12 @@ class UserFilesController < ApplicationController
   # POST /user_files.json
   def create
     @user_file = UserFile.new(user_file_params)
-
+    @folder = Folder.find_by(name: user_file_params[:parent])
+    @folder.user_files.push(@user_file)
     respond_to do |format|
       if @user_file.save
-        format.html { redirect_to @user_file, notice: 'User file was successfully created.' }
-        format.json { render :show, status: :created, location: @user_file }
+        format.html { redirect_to @folder, notice: 'User file was successfully created.' }
+        format.json { redirect_to @folder, status: :created, location: @user_file.path }
       else
         format.html { render :new }
         format.json { render json: @user_file.errors, status: :unprocessable_entity }
@@ -64,11 +66,14 @@ class UserFilesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user_file
-      @user_file = UserFile.find(params[:id])
+      @folder = Folder.where("user_files.id" => params[:$oid]).first
+      puts "--------------------------------------------"
+      puts @folder
+      @user_file = @folder.user_files.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_file_params
-      params.require(:user_file).permit(:name, :path)
+      params.require(:user_file).permit(:name, :path, :parent)
     end
 end

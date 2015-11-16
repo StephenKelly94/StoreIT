@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+#Use MongoDB
 gem 'mongoid', '~> 5.0.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -27,6 +28,8 @@ gem 'spring',        group: :development
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
+
+gem 'devise'
 
 # Use unicorn as the app server
 # gem 'unicorn'

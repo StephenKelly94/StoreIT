@@ -7,8 +7,8 @@
 
 <p>
   <strong>Path:</strong>
-  <%= @user_file.path %>
+  <%= @user_file.parent %>
 </p>
 
 <%= link_to 'Edit', edit_user_file_path(@user_file) %> |
-<%= link_to 'Back', user_files_path %>
+<%= link_to 'Back', folder_path(@folder.id) %>

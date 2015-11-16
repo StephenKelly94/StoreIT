@@ -10,5 +10,27 @@
   <%= @folder.path %>
 </p>
 
+<p>
+  <strong>Parent:</strong>
+  <%= @folder.parent %>
+</p>
+
+
+<p>
+  <strong>Folders:</strong>
+  <% @folders.each do |folder| %>
+  	<%= link_to folder.name, folder_path %>
+  <% end %> 
+</p>
+
+<p>
+  <strong>File:</strong>
+  <% @user_files.each do |user_file| %>
+  	<%= link_to user_file.name, user_file_path(user_file) %>
+  <% end %> 
+</p>
+
+
+
 <%= link_to 'Edit', edit_folder_path(@folder) %> |
 <%= link_to 'Back', folders_path %>
