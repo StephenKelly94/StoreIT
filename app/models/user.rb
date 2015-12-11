@@ -1,5 +1,6 @@
 class User
   include Mongoid::Document
+  include Mongoid::Timestamps
   include ActiveModel::SecurePassword
   include ActiveModel::Validations
   # Include default devise modules. Others available are:
@@ -36,8 +37,7 @@ class User
   # field :unlock_token,    type: String # Only if unlock strategy is :email or :both
   # field :locked_at,       type: Time
   
-
-  has_many :folders
+  embeds_many :folders
   has_and_belongs_to_many :services
 
 

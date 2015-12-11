@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>StoreIT</title>
+  <title><%= yield(:title) %> | StoreIT</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-
-<%= yield %>
-
+	<%= render 'layouts/header' %>
+    <div class="container">
+    	<%= yield %>
+    </div>
+<%= render 'layouts/footer' %>
 </body>
 </html>

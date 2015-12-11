@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-#Use MongoDB
-gem 'mongoid', '~> 5.0.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.6'
@@ -13,6 +11,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
+
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -29,7 +28,6 @@ gem 'spring',        group: :development
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-gem 'devise'
 
 # Use unicorn as the app server
 # gem 'unicorn'
@@ -40,3 +38,12 @@ gem 'devise'
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+#Use MongoDB
+gem 'mongoid', '~> 5.0.0'
+gem 'devise'
+gem "therubyracer"
+gem "less-rails"
+gem 'twitter-bootstrap-rails'
+group :test, :development do
+    gem "better_errors"
+end
