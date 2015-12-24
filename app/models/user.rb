@@ -37,7 +37,8 @@ class User
   # field :unlock_token,    type: String # Only if unlock strategy is :email or :both
   # field :locked_at,       type: Time
   
-  embeds_many :folders
+
+
   has_and_belongs_to_many :services
 
 

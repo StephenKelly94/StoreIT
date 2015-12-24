@@ -1,28 +1,18 @@
-== README
+# Store IT (Early development)
+Store IT is an aggregated free cloud storage web application, using pre-existing free cloud storage services, such as:
+* Dropbox
+* Google Drive
+* One Drive
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+It is intended that a user can sign up and link there accounts that they have for these services and have all the free storage that is offered to them in one place.
+### What is it for?
+Store IT is my ruby on rails web application currently in development for my final year project for BSc(Hons) in Applied Computing at Waterford Institute of Technology.
 
-Things you may want to cover:
+### Information
+Rails version: 4.1.6
+Ruby Version: 2.1.2
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Noteworthy Gems:
+* [Mongoid](https://github.com/mongodb/mongoid)
+* [Devise](https://github.com/plataformatec/devise)
+* [Twitter Bootstrap](https://github.com/seyhunak/twitter-bootstrap-rails)
