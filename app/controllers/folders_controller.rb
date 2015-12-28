@@ -4,6 +4,8 @@ class FoldersController < ApplicationController
   # GET /folders
   # GET /folders.json
   def index
+    #@user =  current_user
+    #@folders = @user.folders
     @folders = Folder.all
   end
 
@@ -11,7 +13,7 @@ class FoldersController < ApplicationController
   # GET /folders/1.json
   def show
     @user_files = @folder.user_files
-    @folders = @folder.folders
+    @folders = current_user.folders
   end
 
   # GET /folders/new
@@ -27,21 +29,21 @@ class FoldersController < ApplicationController
   # POST /folders.json
   def create
     @folder = Folder.new(folder_params)
-    if(@folder.parent != nil) 
-      respond_to do |format|
-        if @folder.save
-          @folder1 = Folder.find_by(name: @folder.parent)
-          puts "------------------------------------"
-          puts @folder1.path
-          puts @folder.path
-          @folder1.folders.push(@folder)
-          format.html { redirect_to @folder, notice: 'Folder was successfully created.' }
-          format.json { render :show, status: :created, location: @folder }
-        else
-          format.html { render :new }
-          format.json { render json: @folder.errors, status: :unprocessable_entity }
+    respond_to do |format|
+        if(@folder.parent != "")
+            @folder1 = Folder.find_by(name: @folder.parent)
+            puts "------------------------------------"
+            puts @folder1.path
+            puts @folder.path
+            @folder1.folders.push(@folder)
         end
-      end
+        if @folder.save
+            format.html { redirect_to @folder, notice: 'Folder was successfully created.' }
+            format.json { render :show, status: :created, location: @folder }
+        else
+            format.html { render :new }
+            format.json { render json: @folder.errors, status: :unprocessable_entity }
+        end
     end
   end
 

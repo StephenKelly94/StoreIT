@@ -3,15 +3,21 @@ Rails.application.routes.draw do
   root to: "static_pages#home"
   get 'about'   => 'static_pages#about'
 
+  get '/dropbox_authorize' => 'dropbox#authorize', as: 'dropbox_authorize'
+  get '/dropbox_deauthorize' => 'dropbox#deauthorize', as: 'dropbox_deauthorize'
+  get '/dropbox_callback' => 'dropbox#dropbox_callback', as: 'dropbox_callback'
+  get '/dropbox_list' => 'dropbox#list', as: 'dropbox_list'
+  get '/dropbox_download' => 'dropbox#download', as: 'dropbox_download'
+
   devise_for :users
 
-  
 
-  resources :users 
 
-  resources :services 
+  resources :users
 
-  resources :folders 
+  resources :services
+
+  resources :folders
 
   resources :user_files
 

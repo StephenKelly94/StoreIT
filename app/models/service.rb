@@ -1,8 +1,12 @@
 class Service
   include Mongoid::Document
   field :name, type: String
-  field :app_key, type: String
-  field :app_secret, type: String
+  field :access_token, type: String
 
-  has_and_belongs_to_many :users
+  embedded_in :user
+
+  def remove
+      self.name = nil
+      self.access_token = nil
+  end
 end
