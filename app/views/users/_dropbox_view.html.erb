@@ -1,9 +1,0 @@
-<% if service_connected?("Dropbox") %>
-    <%= link_to "Connect Dropbox", dropbox_authorize_path, {:class => "dropbox-connect"} %>
-<% else %>
-    <%= link_to "List", dropbox_list_path, {:class => "dropbox-list"} %>
-    </br>
-    <%= link_to "Download", dropbox_download_path, {:class => "dropbox-download"} %>
-    </br>
-    <%= link_to "Disconnect dropbox", dropbox_deauthorize_path %>
-<% end%>

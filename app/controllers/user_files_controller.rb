@@ -67,8 +67,6 @@ class UserFilesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_user_file
       @folder = Folder.where("user_files.id" => params[:$oid]).first
-      puts "--------------------------------------------"
-      puts @folder
       @user_file = @folder.user_files.find(params[:id])
     end
 

@@ -40,7 +40,11 @@ gem 'bcrypt', '~> 3.1.7'
 
 #Use MongoDB
 gem 'mongoid', '~> 5.0.0'
+gem 'mongoid-ancestry'
+
+#Devise for User Authentication
 gem 'devise'
+
 gem "therubyracer"
 gem "less-rails"
 gem 'twitter-bootstrap-rails'

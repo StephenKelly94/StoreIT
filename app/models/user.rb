@@ -40,7 +40,7 @@ class User
 
 
   embeds_many :services
-  embeds_many :folders
+  has_many :folders
 
 
 end

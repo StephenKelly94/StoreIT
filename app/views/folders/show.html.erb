@@ -7,19 +7,20 @@
 
 <p>
   <strong>Path:</strong>
-  <%= @folder.path %>
+  <%= @folder.folder_path %>
 </p>
 
-<p>
-  <strong>Parent:</strong>
-  <%= @folder.parent %>
-</p>
-
+<% if @folder.parent %>
+  <p>
+    <strong>Parent:</strong>
+    <%= link_to @folder.parent.name, @folder.parent %>
+  </p>
+<% end %>
 
 <p>
   <strong>Folders:</strong>
   <% @folders.each do |folder| %>
-  	<%= link_to folder.name, folder_path %>
+  	<%= link_to folder.name, folder_path(folder) %>
   <% end %>
 </p>
 

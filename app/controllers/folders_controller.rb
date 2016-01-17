@@ -12,8 +12,9 @@ class FoldersController < ApplicationController
   # GET /folders/1
   # GET /folders/1.json
   def show
+    @folder = Folder.find(params[:id])
     @user_files = @folder.user_files
-    @folders = current_user.folders
+    @folders = @folder.children
   end
 
   # GET /folders/new

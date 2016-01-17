@@ -84,6 +84,8 @@ GEM
       mongo (~> 2.1)
       origin (~> 2.1)
       tzinfo (>= 0.3.37)
+    mongoid-ancestry (0.4.2)
+      mongoid
     multi_json (1.11.2)
     origin (2.1.1)
     orm_adapter (0.5.0)
@@ -177,6 +179,7 @@ DEPENDENCIES
   jquery-rails
   less-rails
   mongoid (~> 5.0.0)
+  mongoid-ancestry
   rails (= 4.1.6)
   rspec
   sass-rails (~> 4.0.3)

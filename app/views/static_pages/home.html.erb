@@ -2,5 +2,21 @@
 <h1>StaticPages#home</h1>
 <p>Find me in app/views/static_pages/home.html.erb</p>
 <% if signed_in? %>
-    <%= render '/users/dropbox_view' %>
+	<% if service_connected?("Dropbox") %>
+	    <%= link_to "Connect Dropbox", dropbox_authorize_path, {:class => "dropbox-connect"} %>
+	<% else %>
+	    <%= link_to "List", dropbox_list_path, {:class => "dropbox-list"} %>
+	    </br>
+	    <%= link_to "Download", dropbox_download_path, {:class => "dropbox-download"} %>
+	    </br>
+	    <%= link_to "Disconnect dropbox", dropbox_deauthorize_path %>
+		
+
+		<% if @dropbox_root %>
+      		<ol class="dropbox_folders">
+        		<%= render @dropbox_root %>
+     		 </ol>
+    	<% end %>
+
+	<% end%>
 <% end %>
