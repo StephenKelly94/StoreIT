@@ -1,16 +1,29 @@
-<%= nav_bar fixed: :top, brand: "Store-IT", responsive: true, fluid: true , inverse: true do %>
-
-    <ul class="nav navbar-nav pull-right">
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container-fluid">
+  <a class="navbar-brand" href="<%= root_path %>">
+    <div class="navbar-header">
+      <%= image_tag("logo.png", :style => "max-width:80px; margin-top: -20px; margin-right: 20px;") %>
+    </div>
+    Store-IT
+  </a>
+    <ul class="nav navbar-nav navbar-right">
       <% if signed_in? %>
-        <li><%= link_to "Profile", user_path(current_user) %></li>
+        <li class=<%='active' if current_page?(user_path(current_user)) %>>
+          <%= link_to current_user.email, user_path(current_user), class: "active" %>
+        </li>
         <li role="separator" class="divider"></li>
-        <li><%= link_to "Folders", folders_path %></li>
-        <li role="separator" class="divider"></li>
-        <li><%= link_to "Sign Out", destroy_user_session_path, :method => :delete %></li>
+        <li>
+          <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
+        </li>
       <% else %>
-        <li><%= link_to "Sign In", new_user_session_path %></li>
+        <li class=<%='active'  if current_page?(new_user_session_path) %>>
+          <%= link_to "Sign In", new_user_session_path %>
+        </li>
         <li role="separator" class="divider"></li>
-        <li><%= link_to "About", about_path %></li>
+        <li class=<%='active' if current_page?(about_path)%>>
+          <%= link_to "About", about_path %>
+        </li>
       <% end %>
     </ul>
-<% end %>
+  </div>
+</nav>

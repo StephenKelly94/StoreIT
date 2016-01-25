@@ -10,12 +10,12 @@ class UserFilesController < ApplicationController
   # GET /user_files/1
   # GET /user_files/1.json
   def show
+    @user_file = Folder.find_by(parent_id: params[:parent_id]).user_files.find(params[:id])
   end
 
   # GET /user_files/new
   def new
     @user_file = UserFile.new
-    @folders = Folder.all
   end
 
   # GET /user_files/1/edit

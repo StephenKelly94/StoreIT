@@ -1,9 +1,0 @@
-<h1>New user_file</h1>
-
-<%= render 'form' %>
-
-<% @folders.each do |f| %>
-	<%= link_to f.name, f =%>
-<% end %>
-
-<%= link_to 'Back', user_files_path %>

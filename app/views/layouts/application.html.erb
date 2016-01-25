@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= yield(:title) %> | StoreIT</title>
+  <title><%= yield(:title) %> | StoreIT </title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -9,9 +9,16 @@
 <body>
 	<%= render 'layouts/header' %>
     <div class="container">
+        <!-- Handling devise passing non-optimal paramaters -->
         <% flash.each do |key, value| %>
-            <div class="alert alert-<%= key %>"><%= value %></div>
-         <% end %>
+          <% if ((key == "danger") || (key == "warning") || (key == "info") || (key == "success")) %>
+            <div class="alert alert-<%= key %>"><%= value %>
+          <% else %>
+            <div class="alert alert-danger"><%= value %>
+          <% end %>
+              <button class="close" data-dismiss="alert">×</button>
+            </div>
+        <% end %>
     	<%= yield %>
     </div>
 <%= render 'layouts/footer' %>

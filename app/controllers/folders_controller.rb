@@ -1,20 +1,24 @@
 class FoldersController < ApplicationController
   before_action :set_folder, only: [:show, :edit, :update, :destroy]
+  before_filter :correct_user, only: [:show, :create, :edit]
 
   # GET /folders
   # GET /folders.json
   def index
-    #@user =  current_user
-    #@folders = @user.folders
-    @folders = Folder.all
+    @folders = Folder.where(user_id: current_user.id)
   end
 
   # GET /folders/1
   # GET /folders/1.json
   def show
     @folder = Folder.find(params[:id])
-    @user_files = @folder.user_files
-    @folders = @folder.children
+    if @folder
+      @user_files = @folder.user_files
+      @folders = @folder.children
+      @folder.parent ? @parent = @folder.parent.id : @parent = ""
+    else
+      redirect_to root_path
+    end
   end
 
   # GET /folders/new
@@ -31,13 +35,6 @@ class FoldersController < ApplicationController
   def create
     @folder = Folder.new(folder_params)
     respond_to do |format|
-        if(@folder.parent != "")
-            @folder1 = Folder.find_by(name: @folder.parent)
-            puts "------------------------------------"
-            puts @folder1.path
-            puts @folder.path
-            @folder1.folders.push(@folder)
-        end
         if @folder.save
             format.html { redirect_to @folder, notice: 'Folder was successfully created.' }
             format.json { render :show, status: :created, location: @folder }
@@ -73,6 +70,16 @@ class FoldersController < ApplicationController
   end
 
   private
+    # Check if the user is logged in and if they own the folder
+    def correct_user 
+      @folder = Folder.find(params[:id])
+      if signed_in? && @folder
+          redirect_to root_path if @folder.user_id != current_user.id
+      else
+        redirect_to new_user_session_path
+      end
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_folder
       @folder = Folder.find(params[:id])
