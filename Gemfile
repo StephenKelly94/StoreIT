@@ -43,6 +43,8 @@ gem 'mongoid-ancestry'
 
 #Devise for User Authentication
 gem 'devise'
+gem 'oauth2'
+gem 'rest-client'
 
 gem 'react-rails', '~> 1.5.0'
 

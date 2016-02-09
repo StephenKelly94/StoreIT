@@ -5,7 +5,7 @@ var Folders = React.createClass({
 
 		return 	<div >
 					{this.props.folders.map(createFolder)}
-					{" "}
+					<br/>
 					{this.props.user_files.map(createFile)}
 				</div>
 	}

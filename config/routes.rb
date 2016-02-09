@@ -9,6 +9,11 @@ Rails.application.routes.draw do
   get '/dropbox_callback' => 'dropbox#dropbox_callback', as: 'dropbox_callback'
   get '/dropbox_list' => 'dropbox#list', as: 'dropbox_list'
   get '/dropbox_download/:parent_id/:id' => 'dropbox#download', as: 'dropbox_download'
+
+  #Onedrive routes
+  get '/onedrive_authorize' => 'onedrive#authorize', as: 'onedrive_authorize'
+  get '/onedrive_deauthorize' => 'onedrive#deauthorize', as: 'onedrive_deauthorize'
+  
   get '/dirty_check/:id', to: 'dropbox#dirty_check', as: 'dirty_check'
 
   get '/folders/:id', to: 'folders#show', as: 'folder'
