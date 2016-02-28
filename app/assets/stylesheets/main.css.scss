@@ -1,0 +1,76 @@
+$primary-color: rgb(35, 172, 179);
+
+body {
+    padding-top: 70px;
+}
+
+.psuedo-button {
+    background-color: transparent;
+    color: $primary-color;
+    border: 0px;
+    .item-name {
+        padding-left: 10px
+    }
+    &:hover {
+        cursor: pointer;
+        color: black;
+    }
+}
+
+.menu-button {
+    background-color: transparent;
+    color: white;
+    border: 0px;
+    float: right;
+    margin-right: 10px;
+    height: 25px;
+    &:hover {
+        cursor: pointer;
+        color: black;
+    }
+}
+
+
+.folder-browser {
+    width: 100%;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    line-height: 25px;
+    margin: auto;
+    tr{
+        height: 40px;
+        &:hover {
+            background-color: lighten($primary-color, 80%);
+        }
+    }
+    th {
+        border-top: 1px solid black;
+        background-color: $primary-color;
+        color: white;
+        .add-folder {
+            border: 2px solid;
+            border-radius: 20px;
+            margin-right: 10px;
+            background-color: white;
+            color: black;
+            float: right;
+            #folder-name {
+                padding-left: 15px;
+                border: none;
+                background-color: transparent;
+            }
+            .glyphicon-plus-sign {
+                vertical-align: middle;
+                color: black;
+            }
+        }
+    }
+    td{
+        border-bottom: 1px solid black;
+    }
+
+    .selected-item {
+        text-align: center;
+        width: 5%;
+    }
+}

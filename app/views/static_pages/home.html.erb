@@ -4,11 +4,10 @@
 <% if signed_in? %>
 	<% if service_connected?("Dropbox") %>
 	    <%= link_to "Connect Dropbox", dropbox_authorize_path, {:class => "dropbox-connect"} %>
-	<% else %>	
+	<% else %>
 		<div class="container jumbotron">
-			<%= react_component('FoldersContainer', {foldersPath: folder_path(@dropbox_root)}) %>
+			<%= react_component('FoldersContainer', {foldersPath: folder_path(@dropbox_root), service: "dropbox"}) %>
 		</div>
-		<%= link_to "List", dropbox_list_path, {:class => "dropbox-list"} %>
 	    </br>
 		<%= link_to "Disconnect dropbox", dropbox_deauthorize_path %>
 	<% end%>

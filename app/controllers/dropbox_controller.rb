@@ -3,7 +3,7 @@ class DropboxController < ApplicationController
     require 'json'
 
 
-    before_action :create_client, only: [:list, :download, :dirty_check]
+    before_action :create_client, only: [:list, :download, :dirty_check, :create_folder, :delete_folder]
 
     def authorize
         authorize_url = get_web_auth.start()
@@ -27,7 +27,7 @@ class DropboxController < ApplicationController
             flash[:error] = "Already authenticated"
         end
         #This is done because of the before action on list
-        redirect_to dropbox_list_path
+        redirect_to root_path
     end
 
     def dirty_check
@@ -54,6 +54,22 @@ class DropboxController < ApplicationController
         @parent=Folder.find(params[:parent_id])
         @file = @parent.user_files.find(params[:id])
         send_data(@client.get_file(@file.folder_path), :filename => @file.name)
+    end
+
+    def create_folder
+        parent = Folder.find(params[:parent_id])
+        parent.is_root? ? path=parent.folder_path : path=parent.folder_path+"/"
+        puts @client.file_create_folder(path + params[:id].to_s)
+        redirect_to root_path
+    end
+
+    def delete_folder
+        unless item = Folder.find(params[:id])
+            parent = Folder.find(params[:parent_id])
+            item = parent.user_files.find(params[:id])
+        end
+        response = @client.file_delete(item.folder_path)
+        redirect_to root_path, status: 303
     end
 
   private
