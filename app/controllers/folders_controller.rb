@@ -71,7 +71,7 @@ class FoldersController < ApplicationController
 
   private
     # Check if the user is logged in and if they own the folder
-    def correct_user 
+    def correct_user
       @folder = Folder.find(params[:id])
       if signed_in? && @folder
           redirect_to root_path if @folder.user_id != current_user.id

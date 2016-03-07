@@ -26,8 +26,8 @@ var Folders = React.createClass({
 									<button className="menu-button" onClick={this.props.goBack}>
 										Back
 									</button>
-									<button className="menu-button" onClick={this.props.deleteFolder}>
-										Delete Folder
+									<button className="menu-button" onClick={this.props.deleteItem}>
+										Delete Item
 									</button>
 									<button className="menu-button" data-toggle="modal" data-target="#addFolder">
 										Add Folder

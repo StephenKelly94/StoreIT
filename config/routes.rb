@@ -6,15 +6,22 @@ Rails.application.routes.draw do
   #Dropbox routes
   get '/dropbox_authorize' => 'dropbox#authorize', as: 'dropbox_authorize'
   get '/dropbox_deauthorize' => 'dropbox#deauthorize', as: 'dropbox_deauthorize'
-  get '/dropbox_callback' => 'dropbox#dropbox_callback', as: 'dropbox_callback'
+  get '/dropbox_callback' => 'dropbox#callback', as: 'dropbox_callback'
   get '/dropbox_download/:parent_id/:id' => 'dropbox#download'
-  post '/dropbox_create_folder/:parent_id/:id' => 'dropbox#create_folder'
   get '/dropbox_dirty_check/:id' => 'dropbox#dirty_check'
-  delete '/dropbox_delete_folder/:parent_id/:id' => 'dropbox#delete_folder'
+  post '/dropbox_upload' => 'dropbox#upload'
+  post '/dropbox_create_folder/:parent_id/:name' => 'dropbox#create_folder'
+  delete '/dropbox_delete_item/:parent_id/:id' => 'dropbox#delete_item'
 
   #Onedrive routes
   get '/onedrive_authorize' => 'onedrive#authorize', as: 'onedrive_authorize'
   get '/onedrive_deauthorize' => 'onedrive#deauthorize', as: 'onedrive_deauthorize'
+  get '/onedrive_callback' => 'onedrive#callback', as: 'onedrive_callback'
+  get '/onedrive_download/:parent_id/:id' => 'onedrive#download'
+  get '/onedrive_dirty_check/:id' => 'onedrive#dirty_check'
+  post '/onedrive_upload/' => 'onedrive#upload'
+  post '/onedrive_create_folder/:parent_id/:name' => 'onedrive#create_folder'
+  delete '/onedrive_delete_item/:parent_id/:id' => 'onedrive#delete_item'
 
 
   get '/folders/:id', to: 'folders#show', as: 'folder'

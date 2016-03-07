@@ -4,11 +4,20 @@ var FoldersContainer = React.createClass({
 	},
 
 	componentWillMount(){
+        var that = this;
+        $("#" + this.state.service + "_form").fileupload({
+            limitMultiFileUploads: "5",
+            add: function(e, data){
+                data.formData={path: that.state.path}
+                data.submit();
+            }
+        });
 		this.fetchFolders();
 		this.dirtyCheckTimer = setInterval(this.dirtyCheck, 10000);
 	},
 
     componentWillUnmount(){
+        $("#" + this.state.service + "_form").fileupload('destroy');
         clearInterval(this.dirtyCheckTimer);
         this.dirtyCheckTimer = false;
 	},
@@ -17,7 +26,7 @@ var FoldersContainer = React.createClass({
 	fetchFolders(){
 		$.getJSON(
 			this.state.foldersPath,
-			(data) => this.setState({folders: data.children, user_files: data.user_files, parent: data.parent.$oid})
+			(data) => this.setState({folders: data.children, user_files: data.user_files, parent: data.parent.$oid, path: data.folder_path})
 		);
 	},
 
@@ -69,15 +78,15 @@ var FoldersContainer = React.createClass({
 	},
 
 
-	deleteFolder(){
+	deleteItem(){
         // Documentation for querySelectorAll https://www.w3.org/TR/selectors/#attribute-substrings
         // class$= means a class name that ends with. This makes sure that it's deleting for the same service
-        var checkedBoxes = $('input[class$=delete-item-' + this.props.service + ']:checked');
+        var checkedBoxes = $('input[class$=delete-item-' + this.state.service + ']:checked');
         // So I can use 'this' in scope
         var that = this;
-		var deleteItem = function(itemId){
+		var itemDelete = function(itemId){
     		$.ajax({
-        		url: "/" + that.state.service + "_delete_folder/" + that.state.foldersPath.replace("/folders/", "") + "/"+  itemId,
+        		url: "/" + that.state.service + "_delete_item/" + that.state.foldersPath.replace("/folders/", "") + "/"+  itemId,
         		type: "delete",
     			success: function(data){
                     that.dirtyCheck();
@@ -91,14 +100,15 @@ var FoldersContainer = React.createClass({
         for (var i = 0; i < checkedBoxes.length; i++) {
             var row = checkedBoxes[i].parentNode.parentNode
 			var itemName = row.getElementsByClassName("item-name")[0].innerHTML
-            this.state.folders.some(function (element){ if (element.name === itemName) deleteItem(element.id.$oid)})
-			this.state.user_files.some(function (element){ if (element.name === itemName) deleteItem(element.id)})
+            this.state.folders.some(function (element){ if (element.name === itemName) itemDelete(element.id.$oid)})
+			this.state.user_files.some(function (element){ if (element.name === itemName) itemDelete(element.id)})
         }
 	},
 
 	render() {
 		return 	<div>
-			   		<Folders addFolder={this.addFolder} deleteFolder={this.deleteFolder}
+                    <h3 className={"current-path-" + this.state.path} >{this.state.path}</h3>
+			   		<Folders addFolder={this.addFolder} deleteItem={this.deleteItem}
 							 goBack={this.goBack} getChildren={this.getChildren}
 							 downloadFile={this.downloadFile} folders={this.state.folders}
 							 user_files={this.state.user_files} service={this.state.service}/>

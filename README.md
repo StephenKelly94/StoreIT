@@ -12,7 +12,25 @@ Store IT is my ruby on rails web application currently in development for my fin
 Rails version: 4.1.6
 Ruby Version: 2.1.2
 
-Noteworthy Gems:
+
+### Gems
+
+Dropbox:
+* [Dropbox-sdk](https://github.com/dropbox/dropbox-sdk-ruby)
+
+OneDrive:
+* [oAuth2](https://github.com/intridea/oauth2)
+* [RESTClient](https://github.com/rest-client/rest-client)
+
+Database:
 * [Mongoid](https://github.com/mongodb/mongoid)
+* [Mongoid-Ancestry](https://github.com/skyeagle/mongoid-ancestry)
+
+Frontend:
+* [jQuery-Rails](https://github.com/rails/jquery-rails)
+* [jQuery-FileUpload Rails](https://github.com/tors/jquery-fileupload-rails)
+* [React-Rails](https://github.com/reactjs/react-rails)
+
+Misc:
 * [Devise](https://github.com/plataformatec/devise)
 * [Twitter Bootstrap](https://github.com/seyhunak/twitter-bootstrap-rails)

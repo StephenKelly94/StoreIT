@@ -1,8 +1,12 @@
 class StaticPagesController < ApplicationController
   def home
-  	dropbox_root = Folder.roots.find_by(name: "Dropbox_Root")
-  	if((current_user) && (dropbox_root))
-  		@dropbox_root = dropbox_root
+  	if current_user
+        if dropbox_root = Folder.roots.find_by(name: "Dropbox_Root")
+  		    @dropbox_root = dropbox_root
+        end
+        if onedrive_root = Folder.roots.find_by(name: "Onedrive_Root")
+            @onedrive_root = onedrive_root
+        end
   	end
   end
 
