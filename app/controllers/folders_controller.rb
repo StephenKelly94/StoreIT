@@ -13,9 +13,16 @@ class FoldersController < ApplicationController
   def show
     @folder = Folder.find(params[:id])
     if @folder
-      @user_files = @folder.user_files
-      @folders = @folder.children
-      @folder.parent ? @parent = @folder.parent.id : @parent = ""
+        @user_files = @folder.user_files
+        @folders = @folder.children
+        @folder.parent ? @parent = @folder.parent.id : @parent = ""
+        if (@folder.root.name == "Dropbox_Root")
+            @service = current_user.services.find_by(name: "Dropbox")
+        elsif (@folder.root.name == "Onedrive_Root")
+            @service = current_user.services.find_by(name: "Onedrive")
+        else
+            # TODO: Google drive
+      end
     else
       redirect_to root_path
     end
