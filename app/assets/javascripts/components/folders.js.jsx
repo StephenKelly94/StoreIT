@@ -1,14 +1,12 @@
 var Folders = React.createClass({
 	checkName(){
-		var folderName = $('#folder-name')
-		var border = $('.add-folder')
+		var folderName = $("#folder-name-" + this.props.service)
+		var border = $("#add-folder-" + this.props.service)
 		if(!$.trim(folderName.val()) || this.props.folders.some(function (element){return element.name === folderName.val() })){
 			border.css('borderColor', 'red');
-			$('#submit-button').prop('disabled', true)
 		}
 		else{
 			border.css('borderColor', 'green');
-			$('#submit-button').prop('disabled', false)
 		}
 	},
 
@@ -26,17 +24,17 @@ var Folders = React.createClass({
 									<button className="menu-button" onClick={this.props.goBack}>
 										Back
 									</button>
-									<button className="menu-button" onClick={this.props.deleteItem}>
+									<button className="menu-button" onClick={this.props.deleteItem 	}>
 										Delete Item
 									</button>
 									<button className="menu-button" data-toggle="modal" data-target="#addFolder">
 										Add Folder
 									</button>
-									<div className="add-folder">
+									<div id={"add-folder-" + this.props.service} className="add-folder">
 										<button type="button" className="menu-button folder-submit" onClick={this.props.addFolder}>
 											<span className="glyphicon glyphicon-plus-sign"/>
 										</button>
-										<input type="text" id="folder-name" onChange={this.checkName}/>
+										<input type="text" id={"folder-name-" + this.props.service } className="folder-name" onChange={this.checkName}/>
 									</div>
 								</th>
 							</tr>

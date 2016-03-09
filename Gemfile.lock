@@ -47,6 +47,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1.1)
+    concurrent-ruby (1.0.1)
     connection_pool (2.2.0)
     devise (3.5.2)
       bcrypt (~> 3.0)
@@ -134,6 +135,7 @@ GEM
       execjs
       rails (>= 3.2)
       tilt
+    redis (3.2.2)
     ref (2.0.0)
     responders (1.1.2)
       railties (>= 3.2, < 4.2)
@@ -163,6 +165,10 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    sidekiq (4.1.1)
+      concurrent-ruby (~> 1.0)
+      connection_pool (~> 2.2, >= 2.2.0)
+      redis (~> 3.2, >= 3.2.1)
     spring (1.4.0)
     sprockets (2.12.4)
       hike (~> 1.2)
@@ -213,6 +219,7 @@ DEPENDENCIES
   rspec
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
+  sidekiq
   spring
   therubyracer
   turbolinks

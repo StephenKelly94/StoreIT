@@ -51,7 +51,14 @@ class DropboxController < ApplicationController
     end
 
     def upload
-        @client.put_file(params[:path] + "/" + params[:uploaded_file].original_filename, params[:uploaded_file].read)
+        puts "==============================="
+        puts params
+
+        file = File.new(File.join(Rails.root.join('tmp', params[:uploaded_file].original_filename)), "wb+")
+		file.write(params[:uploaded_file].read)
+        file.close
+        Upload.perform_async("dropbox", current_user.services.find_by(name: "Dropbox").access_token, params[:path] + "/" + params[:uploaded_file].original_filename, file.path)
+        # @client.put_file(params[:path] + "/" + params[:uploaded_file].original_filename, params[:uploaded_file].read)
         redirect_to root_path
     end
 

@@ -6,14 +6,24 @@ var FoldersContainer = React.createClass({
 	componentWillMount(){
         var that = this;
         $("#" + this.state.service + "_form").fileupload({
-            limitMultiFileUploads: "5",
             add: function(e, data){
-                data.formData={path: that.state.path}
-                data.submit();
+                if(data.originalFiles.length <= 3)
+                {
+                    // Filesize is limited to 100mb
+                    if(data.files[0].size > 104857600){
+                        console.log('Filesize is too big');
+                    }else{
+                        data.formData={path: that.state.path}
+                        data.submit();
+                        that.fetchFolders();
+                    }
+                }else {
+                    console.log("Too many files")
+                }
             }
         });
 		this.fetchFolders();
-		this.dirtyCheckTimer = setInterval(this.dirtyCheck, 10000);
+		this.dirtyCheckTimer = setInterval(this.dirtyCheck, 60000);
 	},
 
     componentWillUnmount(){
@@ -24,10 +34,15 @@ var FoldersContainer = React.createClass({
 
 	//Get the children(files and folders) and parent
 	fetchFolders(){
-		$.getJSON(
-			this.state.foldersPath,
-			(data) => this.setState({folders: data.children, user_files: data.user_files, parent: data.parent.$oid, path: data.folder_path})
-		);
+        var that = this;
+        $.ajax({
+                url: this.state.foldersPath,
+                dataType: 'json',
+                success: function(data) {
+                    that.setState({folders: data.children, user_files: data.user_files, parent: data.parent.$oid,
+                                      path: data.folder_path, total_space: data.service.total_space, used_space: data.service.used_space})
+                }
+        });
 	},
 
 	//When folder is clicked change the folderspath and fetch folders
@@ -35,6 +50,7 @@ var FoldersContainer = React.createClass({
 		this.state.foldersPath = "/folders/" + folderData;
 		this.fetchFolders();
   	},
+
 
   	//When file is clicked download it
   	downloadFile(folderId, parentId){
@@ -108,6 +124,7 @@ var FoldersContainer = React.createClass({
 	render() {
 		return 	<div>
                     <h3 className={"current-path-" + this.state.path} >{this.state.path}</h3>
+                    <h3>{((this.state.used_space/this.state.total_space) * 100).toFixed(2) + "%"}</h3>
 			   		<Folders addFolder={this.addFolder} deleteItem={this.deleteItem}
 							 goBack={this.goBack} getChildren={this.getChildren}
 							 downloadFile={this.downloadFile} folders={this.state.folders}
