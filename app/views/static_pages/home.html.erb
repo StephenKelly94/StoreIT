@@ -31,4 +31,19 @@
 		</div>
 	<% end%>
 
+	<br/>
+
+	<% if service_connected?("Googledrive") %>
+		<%= link_to "Connect Google Drive", googledrive_authorize_path , {:class => "googledrive-connect"} %>
+	<% else %>
+		<div class="container jumbotron">
+			<%= react_component('FoldersContainer', {foldersPath: folder_path(@googledrive_root), service: "googledrive"}) %>
+			<%= form_tag( "googledrive_upload", :multipart => true, :id => "googledrive_form") do %>
+				<%= label_tag(:uploaded_file, 'Upload your file')
+				    file_field_tag(:uploaded_file, multiple: true) %>
+			<% end %>
+			<%= link_to "Disconnect Google Drive", googledrive_deauthorize_path %>
+		</div>
+	<% end%>
+
 <% end %>

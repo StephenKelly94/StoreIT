@@ -4,6 +4,7 @@ class Folder
   include Mongoid::Ancestry
 
   field :name, type: String
+  field :service_folder_id, type: String
   field :folder_path, type: String
   field :dirty_flag, type: String
 
@@ -14,4 +15,8 @@ class Folder
 
   #To make it a tree. See: https://github.com/skyeagle/mongoid-ancestry
   has_ancestry
+
+  def self.id_to_service_id(folder_id)
+      Folder.find(folder_id).service_folder_id
+  end
 end

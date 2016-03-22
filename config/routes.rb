@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   root to: "static_pages#home"
   get 'about'   => 'static_pages#about'
+  get '/folders/:id', to: 'folders#show', as: 'folder'
 
   #Dropbox routes
   get '/dropbox_authorize' => 'dropbox#authorize', as: 'dropbox_authorize'
@@ -23,8 +24,15 @@ Rails.application.routes.draw do
   post '/onedrive_create_folder/:parent_id/:name' => 'onedrive#create_folder'
   delete '/onedrive_delete_item/:parent_id/:id' => 'onedrive#delete_item'
 
-
-  get '/folders/:id', to: 'folders#show', as: 'folder'
+  #Googledrive routes
+  get '/googledrive_authorize' => 'googledrive#authorize', as: 'googledrive_authorize'
+  get '/googledrive_deauthorize' => 'googledrive#deauthorize', as: 'googledrive_deauthorize'
+  get '/googledrive_callback' => 'googledrive#callback', as: 'googledrive_callback'
+  get '/googledrive_download/:parent_id/:id' => 'googledrive#download'
+  get '/googledrive_dirty_check/:id' => 'googledrive#dirty_check'
+  post '/googledrive_upload/' => 'googledrive#upload'
+  post '/googledrive_create_folder/:parent_id/:name' => 'googledrive#create_folder'
+  delete '/googledrive_delete_item/:parent_id/:id' => 'googledrive#delete_item'
 
   devise_for :users
   resources :users
