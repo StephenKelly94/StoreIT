@@ -47,9 +47,10 @@ gem 'mongoid-ancestry'
 
 #Devise for User Authentication
 gem 'devise'
+#Onedrive & Googledrve
 gem 'oauth2'
 gem 'rest-client'
-
+#Dropbox
 gem 'dropbox-sdk'
 
 group :test, :development do

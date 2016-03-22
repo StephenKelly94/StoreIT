@@ -11,7 +11,6 @@ class FoldersController < ApplicationController
   # GET /folders/1
   # GET /folders/1.json
   def show
-    @folder = Folder.find(params[:id])
     if @folder
         @user_files = @folder.user_files
         @folders = @folder.children
@@ -21,7 +20,7 @@ class FoldersController < ApplicationController
         elsif (@folder.root.name == "Onedrive_Root")
             @service = current_user.services.find_by(name: "Onedrive")
         else
-            # TODO: Google drive
+            @service = current_user.services.find_by(name: "Googledrive")
       end
     else
       redirect_to root_path

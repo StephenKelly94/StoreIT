@@ -1,10 +1,5 @@
 class OnedriveController < ApplicationController
 	# Onedrive API: https://dev.onedrive.com/README.htm
-
-	require 'oauth2'
-	require 'rest-client'
-	require 'json'
-
 	before_action :get_token, only: [:create_folder, :callback, :delete_item, :dirty_check, :download, :upload]
 
 
@@ -25,9 +20,8 @@ class OnedriveController < ApplicationController
 
 	def callback
 		flash[:success] = "You have successfully authorized Onedrive."
-		verb = "get"
 		response = rest_call("https://api.onedrive.com/v1.0/drive/root:/")
-		Folder.roots.create(name: "Onedrive_Root", folder_path: "/drive/root:/", user_id: current_user.id, dirty_flag: response["lastModifiedDateTime"]) unless Folder.roots.find_by(name: "Onedrive_Root")
+		Folder.roots.create(name: "Onedrive_Root", folder_path: "/drive/root:/", dirty_flag: response["lastModifiedDateTime"], user_id: current_user.id) unless Folder.roots.find_by(name: "Onedrive_Root")
 		get_folders
 		redirect_to root_path
 	end
@@ -54,6 +48,7 @@ class OnedriveController < ApplicationController
 		file = parent.user_files.find(params[:id])
 		# Get rid of spaces in file name to make it url safe
 		path = make_url_safe(file.folder_path)
+		# Can't use rest_call helper because of parsing downloaded data
 		location = RestClient.get("https://api.onedrive.com/v1.0#{path}:/content", {:Authorization => "Bearer #{@token}", :content_type => "application/json"})
 		send_data(location, :filename => file.name)
 	end
@@ -62,9 +57,7 @@ class OnedriveController < ApplicationController
 		file = File.new(File.join(Rails.root.join('tmp', params[:uploaded_file].original_filename)), "wb+")
 		file.write(params[:uploaded_file].read)
         file.close
-        Upload.perform_async("onedrive", @token, params[:path]  + params[:uploaded_file].original_filename, file.path)
-		# path = params[:path] + params[:uploaded_file].original_filename
-		# rest_call("https://api.onedrive.com/v1.0#{path}:/content", "put", params[:uploaded_file].read, "application/octet-stream")
+        Upload.perform_async("onedrive", @token, make_url_safe(params[:path]  + params[:uploaded_file].original_filename), file.path)
         redirect_to root_path
     end
 
@@ -83,7 +76,6 @@ class OnedriveController < ApplicationController
         end
 		path = make_url_safe(item.folder_path)
 		rest_call("https://api.onedrive.com/v1.0#{path}", "delete")
-		#RestClient.delete("https://api.onedrive.com/v1.0#{path}", {:Authorization => "Bearer #{@token}"})
 		redirect_to root_path, status: 303
 	end
 
@@ -99,7 +91,7 @@ class OnedriveController < ApplicationController
 		  name = folder["name"]
 		  if(!folder["folder"].nil?)
 			  #if it's a folder add as a child folder
-			  parent.children.create(name: name, folder_path: full_path, user_id: current_user.id, dirty_flag: folder["lastModifiedDateTime"]) unless parent.children.find_by(folder_path: full_path)
+			  parent.children.create(name: name, folder_path: full_path, dirty_flag: folder["lastModifiedDateTime"], user_id: current_user.id) unless parent.children.find_by(folder_path: full_path)
 
 			  #recursively call to get the children of this folder
 			  #get_folders(parent.children.find_by(folder_path: full_path), depth+1, child_folders)
@@ -139,11 +131,6 @@ class OnedriveController < ApplicationController
         response = JSON.parse(RestClient.get("https://api.onedrive.com/v1.0/drives/me", {:Authorization => "Bearer #{@token}"}))
         current_user.services.find_by(name: "Onedrive").update( used_space: response["quota"]["used"], total_space: response["quota"]["total"])
     end
-
-	def rest_call(url, verb="get", payload=nil, contentType="json")
-		verb === "delete" ? RestClient::Request.execute(method: verb, url: url, payload: payload, headers: {Authorization: "Bearer #{@token}", content_type: contentType}) :
-				JSON.parse(RestClient::Request.execute(method: verb, url: url, payload: payload, headers: {Authorization: "Bearer #{@token}", content_type: contentType}))
-	end
 
 	def make_url_safe(url)
 		url.tr(' ', '+')

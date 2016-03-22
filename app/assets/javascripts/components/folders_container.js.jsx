@@ -62,7 +62,7 @@ var FoldersContainer = React.createClass({
   	},
 
   	dirtyCheck(){
-  		$.ajax({
+		$.ajax({
     		url:  "/" + this.state.service + "_dirty_check/" +  this.state.foldersPath.replace("/folders/", ""),
     		type: "get"
     	});
@@ -79,11 +79,11 @@ var FoldersContainer = React.createClass({
 	addFolder(){
     	var that = this;
 		$.ajax({
-    		url: "/" + this.state.service + "_create_folder/" + this.state.foldersPath.replace("/folders/", "") + "/" +  $('#folder-name').val(),
+    		url: "/" + this.state.service + "_create_folder/" + this.state.foldersPath.replace("/folders/", "") + "/" +  $('#folder-name-'+this.state.service).val(),
     		type: "post",
 			success: function(data){
-                $('#addFolder').modal('hide');
-                $('#folder-name').val('').css('borderColor', 'red');
+                $('#add-folder-'+that.state.service).css('borderColor', 'black');
+                $('#folder-name-'+that.state.service).val('');
                 that.dirtyCheck();
                 $.notify(
                     "Added",

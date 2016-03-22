@@ -22,7 +22,7 @@ class DropboxController < ApplicationController
         response = @client.account_info
         current_user.services.create!(name: "Dropbox", access_token: access_token, used_space: response["quota_info"]["normal"], total_space: response["quota_info"]["quota"])
         ##Create root folder for dropbox
-        Folder.roots.create(name: "Dropbox_Root", folder_path: "/", user_id: current_user.id, dirty_flag: @client.metadata("/")["hash"]) unless Folder.roots.find_by(name: "Dropbox_Root")
+        Folder.roots.create(name: "Dropbox_Root", folder_path: "/", dirty_flag: @client.metadata("/")["hash"], user_id: current_user.id) unless Folder.roots.find_by(name: "Dropbox_Root")
         flash[:success] = "You have successfully authorized Dropbox."
         get_folders
         redirect_to root_path
@@ -51,9 +51,6 @@ class DropboxController < ApplicationController
     end
 
     def upload
-        puts "==============================="
-        puts params
-
         file = File.new(File.join(Rails.root.join('tmp', params[:uploaded_file].original_filename)), "wb+")
 		file.write(params[:uploaded_file].read)
         file.close
