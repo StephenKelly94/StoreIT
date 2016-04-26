@@ -21,3 +21,32 @@
 //= require bootstrap.min
 //= require notify.min
 //= require_tree .
+
+
+// Taken from github for jquery file upload
+// https://github.com/blueimp/jquery-file-upload/wiki/drop-zone-effects
+$(document).bind('dragover', function (e)
+{
+    var dropZone = $('.dropzone'),
+    foundDropzone;
+    var found = false,
+    node = e.target;
+    do{
+        if ($(node).hasClass('dropzone'))
+        {
+            found = true;
+            foundDropzone = $(node);
+            break;
+        }
+        node = node.parentNode;
+    }while ((node != null) && dropZone.hasClass('hover'));
+    dropZone.removeClass('hover');
+    if (found)
+    {
+        foundDropzone.addClass('hover');
+    }
+});
+
+$(document).bind('drop', function (e) {
+    $('.dropzone').removeClass('hover');
+});

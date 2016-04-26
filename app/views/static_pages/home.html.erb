@@ -1,49 +1,6 @@
 <% provide(:title, "Home") %>
-<h1>StaticPages#home</h1>
-<p>Find me in app/views/static_pages/home.html.erb</p>
 <% if signed_in? %>
-
-	<% if service_connected?("Dropbox") %>
-	    <%= link_to "Connect Dropbox", dropbox_authorize_path, {:class => "dropbox-connect"} %>
-	<% else %>
-		<div class="container jumbotron">
-			<%= react_component('FoldersContainer', {foldersPath: folder_path(@dropbox_root), service: "dropbox"})%>
-			<%= form_tag( "dropbox_upload", :multipart => true, :id => "dropbox_form") do %>
-				<%= label_tag(:uploaded_file, 'Upload your file')
-				    file_field_tag(:uploaded_file, multiple: true)%>
-			<% end %>
-			<%= link_to "Disconnect Dropbox", dropbox_deauthorize_path %>
-			<br/>
-		</div>
-	<% end%>
-	<br/>
-
-	<% if service_connected?("Onedrive") %>
-		<%= link_to "Connect OneDrive", onedrive_authorize_path , {:class => "onedrive-connect"} %>
-	<% else %>
-		<div class="container jumbotron">
-			<%= react_component('FoldersContainer', {foldersPath: folder_path(@onedrive_root), service: "onedrive"}) %>
-			<%= form_tag( "onedrive_upload", :multipart => true, :id => "onedrive_form") do %>
-				<%= label_tag(:uploaded_file, 'Upload your file')
-				    file_field_tag(:uploaded_file, multiple: true) %>
-			<% end %>
-			<%= link_to "Disconnect Onedrive", onedrive_deauthorize_path %>
-		</div>
-	<% end%>
-
-	<br/>
-
-	<% if service_connected?("Googledrive") %>
-		<%= link_to "Connect Google Drive", googledrive_authorize_path , {:class => "googledrive-connect"} %>
-	<% else %>
-		<div class="container jumbotron">
-			<%= react_component('FoldersContainer', {foldersPath: folder_path(@googledrive_root), service: "googledrive"}) %>
-			<%= form_tag( "googledrive_upload", :multipart => true, :id => "googledrive_form") do %>
-				<%= label_tag(:uploaded_file, 'Upload your file')
-				    file_field_tag(:uploaded_file, multiple: true) %>
-			<% end %>
-			<%= link_to "Disconnect Google Drive", googledrive_deauthorize_path %>
-		</div>
-	<% end%>
-
+	<%= render 'layouts/home/logged_in/logged_in' %>
+<% elsif  %>
+	<%= render 'layouts/home/logged_out/logged_out' %>
 <% end %>

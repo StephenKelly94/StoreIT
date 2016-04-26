@@ -1,0 +1,14 @@
+<button type="submit" class="connect-button">
+    <div class="col-md-12">
+        <%= image_tag(serviceName+".png", :class => serviceName+"-logo logo" )%>
+    </div>
+    <% if service_connected?(serviceName.capitalize) %>
+        <div class="col-md-12">
+            <%= link_to "Connect " + serviceName.capitalize, serviceAuthorizePath -%>
+        </div>
+    <% else %>
+        <div class="col-md-12">
+            <%= link_to "Disconnect " + serviceName.capitalize, serviceDeauthorizePath -%>
+        </div>
+    <% end%>
+</button>

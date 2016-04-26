@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   post '/dropbox_upload' => 'dropbox#upload'
   post '/dropbox_create_folder/:parent_id/:name' => 'dropbox#create_folder'
   delete '/dropbox_delete_item/:parent_id/:id' => 'dropbox#delete_item'
+  get '/dropbox_hard_refresh' => 'dropbox#hard_refresh', as: 'dropbox_hard_refresh'
 
   #Onedrive routes
   get '/onedrive_authorize' => 'onedrive#authorize', as: 'onedrive_authorize'
@@ -23,6 +24,7 @@ Rails.application.routes.draw do
   post '/onedrive_upload/' => 'onedrive#upload'
   post '/onedrive_create_folder/:parent_id/:name' => 'onedrive#create_folder'
   delete '/onedrive_delete_item/:parent_id/:id' => 'onedrive#delete_item'
+  get '/onedrive_hard_refresh' => 'onedrive#hard_refresh', as: 'onedrive_hard_refresh'
 
   #Googledrive routes
   get '/googledrive_authorize' => 'googledrive#authorize', as: 'googledrive_authorize'
@@ -33,13 +35,12 @@ Rails.application.routes.draw do
   post '/googledrive_upload/' => 'googledrive#upload'
   post '/googledrive_create_folder/:parent_id/:name' => 'googledrive#create_folder'
   delete '/googledrive_delete_item/:parent_id/:id' => 'googledrive#delete_item'
+  get '/googledrive_hard_refresh' => 'googledrive#hard_refresh', as: 'googledrive_hard_refresh'
+
 
   devise_for :users
   resources :users
 
-  resources :services
-
-  resources :user_files
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -2,7 +2,7 @@ class DropboxController < ApplicationController
     require 'dropbox_sdk'
     require 'json'
 
-    before_action :create_client, only: [:create_folder, :delete_item, :dirty_check, :download, :upload]
+    before_action :create_client, only: [:create_folder, :delete_item, :dirty_check, :hard_refresh, :download, :upload]
 
     def authorize
         authorize_url = get_web_auth.start()
@@ -22,10 +22,21 @@ class DropboxController < ApplicationController
         response = @client.account_info
         current_user.services.create!(name: "Dropbox", access_token: access_token, used_space: response["quota_info"]["normal"], total_space: response["quota_info"]["quota"])
         ##Create root folder for dropbox
-        Folder.roots.create(name: "Dropbox_Root", folder_path: "/", dirty_flag: @client.metadata("/")["hash"], user_id: current_user.id) unless Folder.roots.find_by(name: "Dropbox_Root")
+        Folder.roots.create(name: "Dropbox_Root", folder_path: "/", dirty_flag: @client.metadata("/")["hash"], user_id: current_user.id) unless Folder.roots.where(name: "Dropbox_Root", user_id: current_user.id).first
         flash[:success] = "You have successfully authorized Dropbox."
         get_folders
         redirect_to root_path
+    end
+
+    def hard_refresh
+        folder = Folder.roots.find_by(name: "Dropbox_Root")
+        #Destroy older files and folders
+        folder.children.destroy
+        folder.user_files.destroy
+        folder.save
+        update_space
+        get_folders
+		redirect_to root_path
     end
 
     def dirty_check
@@ -55,15 +66,18 @@ class DropboxController < ApplicationController
 		file.write(params[:uploaded_file].read)
         file.close
         Upload.perform_async("dropbox", current_user.services.find_by(name: "Dropbox").access_token, params[:path] + "/" + params[:uploaded_file].original_filename, file.path)
-        # @client.put_file(params[:path] + "/" + params[:uploaded_file].original_filename, params[:uploaded_file].read)
-        redirect_to root_path
+        respond_to do |format|
+          format.json { render :json => { "name" => params[:uploaded_file].original_filename}.to_json }
+        end
     end
 
     def create_folder
         parent = Folder.find(params[:parent_id])
         parent.is_root? ? path=parent.folder_path : path=parent.folder_path+"/"
         @client.file_create_folder(path + params[:name].to_s)
-        redirect_to root_path
+        respond_to do |format|
+          format.json { render :json => params.as_json(:only => :name) }
+        end
     end
 
     def delete_item
@@ -72,14 +86,16 @@ class DropboxController < ApplicationController
             item = parent.user_files.find(params[:id])
         end
         @client.file_delete(item.folder_path)
-        redirect_to root_path, status: 303
+        respond_to do |format|
+          format.json { render :json => item.as_json(:only => :name) }
+        end
     end
 
   private
 
     #Puts all the files/folders of dropbox into database
     #In the future should use depth to make api call efficient
-    def get_folders(parent = Folder.roots.find_by(name: "Dropbox_Root"))
+    def get_folders(parent = Folder.roots.where(name: "Dropbox_Root", user_id: current_user.id).first)
         folders = @client.metadata(parent.folder_path)
         if !parent.is_root? and parent.dirty_flag
             # Set the hash of the parent node, since dropbox only returns hash of current folder not children

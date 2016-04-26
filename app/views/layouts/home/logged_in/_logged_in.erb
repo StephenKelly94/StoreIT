@@ -1,0 +1,68 @@
+<div class="logged-in-container">
+    <div class="col-md-12">
+        <div class="main-text-group">
+            <h1>Welcome to Store-IT</h1>
+        </div>
+    </div>
+    <div class="col-md-12 settings">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+            <div class="col-md-4 col-md-offset-2">
+                <%= link_to "Edit Account", "#edit-user", :class => "my-links", "data-toggle" => "modal" %>
+            </div>
+            <div class="col-md-4 col-md-offset-2">
+                <%= link_to "Sign Out", destroy_user_session_path, :method => :delete, :class => "my-links" -%>
+            </div>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-6">
+            <div class="connect-button-group">
+                <div class="col-md-4">
+                    <%= render :partial => 'layouts/home/logged_in/service_button',
+                               :locals => {:serviceName => "dropbox", :serviceAuthorizePath => dropbox_authorize_path,
+                               :serviceDeauthorizePath => dropbox_deauthorize_path} %>
+                </div>
+                <div class="col-md-4">
+                    <%= render :partial => 'layouts/home/logged_in/service_button',
+                               :locals => {:serviceName => "onedrive", :serviceAuthorizePath => onedrive_authorize_path,
+                               :serviceDeauthorizePath => onedrive_deauthorize_path} %>
+                </div>
+                <div class="col-md-4">
+                    <%= render :partial => 'layouts/home/logged_in/service_button',
+                               :locals => {:serviceName => "googledrive", :serviceAuthorizePath => googledrive_authorize_path,
+                               :serviceDeauthorizePath => googledrive_deauthorize_path} %>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <!-- Check Services  -->
+    <% servicesConnected = how_many_connected%>
+
+    <%= render :partial => 'layouts/home/logged_in/component', :locals => { :serviceName => "dropbox",  :serviceAuthorizePath => dropbox_authorize_path,
+                                                     :serviceContainerId => "dropbox-container", :serviceRootFolder => @dropbox_root,
+                                                     :serviceFormTagText => "dropbox_upload", :serviceFormTagId => "dropbox-form",
+                                                     :serviceDeauthorizePath => dropbox_deauthorize_path, :servicesConnected => servicesConnected}%>
+
+    <%= render :partial => 'layouts/home/logged_in/component', :locals => { :serviceName => "onedrive", :serviceAuthorizePath => onedrive_authorize_path,
+                                                     :serviceContainerId => "onedrive-container", :serviceRootFolder => @onedrive_root,
+                                                     :serviceFormTagText => "onedrive_upload", :serviceFormTagId => "onedrive-form",
+                                                     :serviceDeauthorizePath => onedrive_deauthorize_path, :servicesConnected => servicesConnected}%>
+
+    <%= render :partial => 'layouts/home/logged_in/component', :locals => { :serviceName => "googledrive", :serviceAuthorizePath => googledrive_authorize_path,
+                                                     :serviceContainerId => "googledrive-container", :serviceRootFolder => @googledrive_root,
+                                                     :serviceFormTagText => "googledrive_upload", :serviceFormTagId => "googledrive-form",
+                                                     :serviceDeauthorizePath => googledrive_deauthorize_path, :servicesConnected => servicesConnected}%>
+</div>
+
+<%= render :partial => 'layouts/home/logged_in/edit' %>

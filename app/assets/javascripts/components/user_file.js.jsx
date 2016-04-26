@@ -10,7 +10,7 @@ var UserFile = React.createClass({
 					<td className="selected-item">
 						<input type="checkbox" className={"delete-item delete-item-" + this.props.service}/>
 					</td>
-			   		<td className="psuedo-button" onMouseOver={this.toggleHover} onMouseOut={this.toggleHover} onClick={this.props.downloadFile.bind(null, this.props.id, this.props.parent_id)}>
+			   		<td className="psuedo-button" onMouseOver={this.toggleHover} onMouseOut={this.toggleHover} onClick={this.props.downloadFile.bind(null, this.props.id, this.props.parent_id, this.props.name)}>
 						<span className={this.state.open ? "glyphicon glyphicon-save-file" : "glyphicon glyphicon-file"}/>
 						<span className="item-name">{this.props.name}</span>
 					</td>

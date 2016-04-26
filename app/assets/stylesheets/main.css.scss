@@ -1,78 +1,259 @@
-$primary-color: rgb(57, 148, 153);
+$base-colour: #189EB1;
+$compliment-colour: #F57600;
+$my-dark-grey: #2C484C;
+$my-light-grey: #F8FAFB;
 
 body {
-    padding-top: 70px;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    background-color: $my-light-grey;
+}
+
+a {
+    color: $my-dark-grey;
+    &:hover {
+        color: $compliment-colour;
+    }
+}
+
+.base-button {
+    background-color: $compliment-colour;
+    color: $my-light-grey;
+    text-align: center;
+    text-decoration: none;
+    border: none;
 }
 
 .psuedo-button {
     background-color: transparent;
-    color: $primary-color;
+    color: $base-colour;
     border: 0px;
     .item-name {
         padding-left: 10px
     }
     &:hover {
         cursor: pointer;
-        color: black;
+        color: $compliment-colour;
+    }
+}
+
+.connect-button {
+    box-shadow: 3px 5px 30px -3px $my-dark-grey;
+    background-color:$my-light-grey;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    .logo{
+        width: 80px;
+        height: 80px;
+    }
+    .dropbox-logo{
+        clip: auto;
     }
 }
 
 .menu-button {
     outline: none;
     background-color: transparent;
-    color: white;
+    color: $my-dark-grey;
     border: 0px;
     float: right;
     margin-right: 10px;
     height: 25px;
     &:hover {
         cursor: pointer;
-        color: black;
+        color: $compliment-colour;
     }
 }
 
 
 .folder-browser {
-    width: 100%;
-    border-right: 1px solid black;
-    border-left: 1px solid black;
     line-height: 25px;
-    margin: auto;
+    width: 100%;
     tr{
         height: 40px;
-        &:hover {
-            background-color: lighten($primary-color, 80%);
-        }
-    }
-    th {
-        border-top: 1px solid black;
-        background-color: $primary-color;
-        color: white;
-        .add-folder {
-            border: 2px solid;
-            border-radius: 20px;
-            margin-right: 10px;
-            background-color: white;
-            color: black;
-            float: right;
-            .folder-name {
-                outline: none;
-                padding-left: 15px;
-                border: none;
-                background-color: transparent;
-            }
-            .glyphicon-plus-sign {
-                vertical-align: middle;
-                color: black;
-            }
-        }
-    }
-    td{
-        border-bottom: 1px solid black;
     }
 
+    td{
+        color: $my-dark-grey;
+        background-color: $my-light-grey;
+        padding: 9px 8px 0px 8px;
+    }
+    thead{
+        display:block;
+    }
+    tbody{
+        display: inline-block;
+        height: 300px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
     .selected-item {
         text-align: center;
         width: 5%;
     }
+}
+
+.current-path{
+    overflow:auto;
+}
+
+.service-title {
+    text-transform:capitalize;
+    text-align: center;
+}
+
+
+.table-head-separator {
+    clear: both;
+    bottom: 0;
+    border-bottom: 2px solid $base-colour;
+}
+
+
+.add-folder {
+    border: 2px solid;
+    border-radius: 20px;
+    margin-right: 10px;
+    background-color: white;
+    color: black;
+    float: right;
+    display: inline-block;
+    .folder-name {
+        position: relative;
+        outline: none;
+        bottom: -2px;
+        padding-left: 15px;
+        border: none;
+        background-color: transparent;
+    }
+    .glyphicon-plus-sign {
+        position: relative;
+        top: -1px;
+        vertical-align: middle;
+        color: black;
+    }
+}
+
+.main-container{
+    background-color: $base-colour;
+    position:relative;
+    height: 600px;
+    .welcome-text{
+        margin: 30px;
+        color: $my-light-grey;
+        small{
+            color: $my-light-grey;;
+        }
+    }
+    .my-info {
+        position: absolute;
+        margin: 0 auto;
+        clear:both;
+        width: 100%;
+        bottom: -125px;
+        .inner-container{
+            box-shadow: 3px 5px 30px -3px $my-dark-grey;
+            height: 250px;
+            background-color:$my-light-grey;
+            text-align: center;
+            color: $my-dark-grey;
+            .glyphicon {
+                color: $compliment-colour;
+                padding: 10px 0px 0px 0px;
+                font-size: 5em;
+                display:block;
+                text-align:center
+            }
+            p {
+                padding: 0px 15px;
+            }
+        }
+    }
+    .login-section {
+        margin-top: 30px;
+        padding: 5px 5px 30px 20px;
+        color:$my-dark-grey;
+        display:inline;
+        background-color:$my-light-grey;
+        box-shadow: 3px 5px 30px -3px $my-dark-grey;
+    }
+}
+
+.logged-in-container{
+    background-color: $base-colour;
+    position:relative;
+    height: 250px;
+    .main-text-group{
+        color: $my-light-grey;
+        h1{
+            text-align: center;
+        }
+    }
+    .connect-button-group{
+        position: relative;
+        bottom: -10px;
+    }
+    .settings{
+        display: inline;
+        .my-links{
+            color: $my-light-grey;
+            &:hover{
+                color: $compliment-colour
+            }
+        }
+    }
+}
+
+// Helpful answer found here: http://stackoverflow.com/questions/9437400/css-fade-out-horizontal-rule-line-styled-div-effect-without-images
+.my-separator {
+    z-index: -2;
+    border: 0;
+    height: 2px;
+    margin: 150px 0px 18px 0px;
+    position:relative;
+    text-align: center;
+    background: -moz-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 10%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0) 90%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0)), color-stop(10%,rgba(0,0,0,0)), color-stop(50%,rgba(0,0,0,0.65)), color-stop(90%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 10%,rgba(0,0,0,0.65) 50%,rgba(0,0,0,0) 90%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 10%,rgba(0,0,0,0.65) 50%,rgba(0,0,0,0) 90%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 10%,rgba(0,0,0,0.65) 50%,rgba(0,0,0,0) 90%,rgba(0,0,0,0) 100%); /* IE10+ */
+    background: linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 10%,rgba(0,0,0,0.65) 50%,rgba(0,0,0,0) 90%,rgba(0,0,0,0) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+    &:before {
+        display: block;
+        border-top: solid 1px $my-dark-grey;
+        width: 100%;
+        height: 1px;
+        position: absolute;
+        top: 50%;
+        clear: both;
+    }
+}
+
+.my-footer {
+    clear: both;
+    padding-top: 30px;
+    text-align: center;
+    .my-footer-logo{
+        z-index: -1;
+        position: relative;
+        top: -48px;
+        width: 80px;
+    }
+}
+
+
+.dropzone.hover {
+    border: 1px solid #099828;
+}
+.dropzone.fade {
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    opacity: 1;
 }

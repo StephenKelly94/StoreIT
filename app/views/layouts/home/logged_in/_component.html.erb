@@ -1,0 +1,32 @@
+<div class="<%= servicesConnected%>" id="<%= serviceContainerId %>">
+    <% unless service_connected?(serviceName.capitalize) %>
+        <%= react_component('FoldersContainer', {foldersPath: folder_path(serviceRootFolder), service: serviceName}) -%>
+
+        <!-- Modal -->
+        <div id= "<%="uploadFile-" + serviceName%>" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">File Upload</h4>
+              </div>
+              <div class="modal-body">
+                  <p> Select file(s) to upload</p>
+                  <p> Maximum 3 files at 100mb each</p>
+                    <%= form_tag( serviceFormTagText, :multipart => true, :id => serviceFormTagId) do %>
+                        <%= label_tag(:uploaded_file, 'Upload your file')
+                        file_field_tag(:uploaded_file, multiple: true) %>
+                    <% end %>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+    <% end%>
+</div>

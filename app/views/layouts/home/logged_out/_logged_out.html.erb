@@ -1,0 +1,50 @@
+<div class="main-container">
+    <div class="welcome-text col-md-6">
+        <div class="page-header">
+            <h1>Welcome to Store-IT</br>
+                <small>A centralized location for all of your cloud storage management needs. </small>
+            </h1>
+        </div>
+    </div>
+    <div class="login-section col-md-4 col-md-offset-1 ">
+        <div class="col-md-5">
+            <%= render 'layouts/home/logged_out/login' -%>
+        </div>
+        <div class="col-md-5 col-md-offset-2">
+            <%= render 'layouts/home/logged_out/signup' -%>
+        </div>
+    </div>
+    <div class="my-info">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8">
+            <div class="col-md-4">
+                <div class="inner-container animated slideInLeft">
+                    <div class="glyphicon glyphicon-user"></div>
+                    <h3> Signup </h3>
+                    <p> Simply sign up to a new Store-IT account and provide an email and password to start storing today! </p>
+                    <p> If you already have your account, just log in. </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="inner-container animated slideInUp">
+                    <div class="glyphicon glyphicon-refresh"></div>
+                    <h3> Connect </h3>
+                    <p>Connect Store-IT to one of the supported services, such as: Dropbox, One Drive and Google Drive.</p>
+                    <p>Allow Store-IT access to manage user files.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="inner-container animated slideInRight">
+                    <div class="glyphicon glyphicon-cloud"></div>
+                    <h3> Manage </h3>
+                    <p> Store-IT allows you to create and delete folders, and upload and download files while remaining in sync with the service.  Managing storage accross multiple services has never been easier.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+        </div>
+    </div>
+</div>
+
+<%= render 'layouts/home/logged_out/password_reset' -%>

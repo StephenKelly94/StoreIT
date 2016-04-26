@@ -5,23 +5,57 @@ var FoldersContainer = React.createClass({
 
 	componentWillMount(){
         var that = this;
-        $("#" + this.state.service + "_form").fileupload({
+
+
+        //File upload functionality
+        $("#" + this.state.service + "-form").fileupload({
+            dropZone: $(".dropzone"),
+            //When files get added
             add: function(e, data){
+                //If there is not too many files
                 if(data.originalFiles.length <= 3)
                 {
                     // Filesize is limited to 100mb
                     if(data.files[0].size > 104857600){
-                        console.log('Filesize is too big');
+                        $.notify(
+                          "File too large",
+                          { position:"left bottom",  className: "warn" }
+                        );
+                    //Submit files and alert
                     }else{
+                        if(that.state.service === "onedrive"){
+                          that.setState({path: that.state.path.replace("/", "/drive/root:/")})
+                        }
                         data.formData={path: that.state.path}
-                        data.submit();
-                        that.fetchFolders();
+                        data.submit()
+                            //On successful upload
+                            .success(function(result, textStatus, jqXHR){
+                                $.notify(
+                                  "Uploaded file:  '" + result.name + "'",
+                                  { position:"left bottom",  className: "success" }
+                                );
+                                that.hardRefresh();
+                			})
+                            //If it fails
+                            .error(function (jqXHR, textStatus, errorThrown) {
+                                console.log(jqXHR)
+                                $.notify(
+                                  "Something has gone wrong",
+                                  { position:"left bottom",  className: "warn" }
+                                );
+                            })
+                        $('#uploadFile-'+that.state.service).modal('hide');
                     }
                 }else {
-                    console.log("Too many files")
+                    $.notify(
+                      "Too many files",
+                      { position:"left bottom",  className: "warn" }
+                    );
                 }
             }
         });
+
+
 		this.fetchFolders();
 		this.dirtyCheckTimer = setInterval(this.dirtyCheck, 60000);
 	},
@@ -32,16 +66,41 @@ var FoldersContainer = React.createClass({
         this.dirtyCheckTimer = false;
 	},
 
+    //Checks the folder name
+    checkName(){
+		var folderName = $("#folder-name-" + this.props.service)
+		var border = $("#add-folder-" + this.props.service)
+		if(folderName.val() === ""){
+			border.css('borderColor', 'black');
+		}
+		else if(!$.trim(folderName.val()) || this.state.folders.some(function (element){return element.name === folderName.val() })){
+			border.css('borderColor', 'red');
+		}
+		else{
+			border.css('borderColor', 'green');
+		}
+	},
+
 	//Get the children(files and folders) and parent
 	fetchFolders(){
         var that = this;
         $.ajax({
-                url: this.state.foldersPath,
-                dataType: 'json',
-                success: function(data) {
-                    that.setState({folders: data.children, user_files: data.user_files, parent: data.parent.$oid,
-                                      path: data.folder_path, total_space: data.service.total_space, used_space: data.service.used_space})
+            url: this.state.foldersPath,
+            dataType: 'json',
+            success: function(data) {
+                that.setState({folders: data.children, user_files: data.user_files, parent: data.parent.$oid,
+                                  path: data.folder_path, total_space: data.service.total_space, used_space: data.service.used_space})
+                //Handle onedrives path to make it look nice
+                if(that.state.service === "onedrive"){
+                  that.setState({path: data.folder_path.replace("/drive/root:/", "/")})
                 }
+            },
+            error: function(err) {
+                $.notify(
+                  "Files are not consistent",
+                  { position:"left bottom",  className: "warn" }
+                );
+            }
         });
 	},
 
@@ -53,20 +112,34 @@ var FoldersContainer = React.createClass({
 
 
   	//When file is clicked download it
-  	downloadFile(folderId, parentId){
+  	downloadFile(folderId, parentId, name ){
   		window.location = "/" + this.state.service + "_download/" + parentId + "/" + folderId;
         $.notify(
-          "Downloading",
+          "Downloading file: '" + name + "'",
           { position:"left bottom",  className: "info" }
         );
   	},
 
-  	dirtyCheck(){
+    dirtyCheck(){
+        var that = this;
 		$.ajax({
     		url:  "/" + this.state.service + "_dirty_check/" +  this.state.foldersPath.replace("/folders/", ""),
-    		type: "get"
+    		type: "get",
+            success: function(data) {
+                that.fetchFolders();
+            }
     	});
-		this.fetchFolders();
+  	},
+
+    hardRefresh(){
+        var that = this;
+		$.ajax({
+    		url:  "/" + this.state.service + "_hard_refresh/",
+    		type: "get",
+            success: function(data) {
+                that.fetchFolders();
+            }
+    	});
   	},
 
   	//when the back button is clicked change the folder to the parent
@@ -78,19 +151,21 @@ var FoldersContainer = React.createClass({
 
 	addFolder(){
     	var that = this;
-		$.ajax({
-    		url: "/" + this.state.service + "_create_folder/" + this.state.foldersPath.replace("/folders/", "") + "/" +  $('#folder-name-'+this.state.service).val(),
-    		type: "post",
-			success: function(data){
-                $('#add-folder-'+that.state.service).css('borderColor', 'black');
-                $('#folder-name-'+that.state.service).val('');
-                that.dirtyCheck();
-                $.notify(
-                    "Added",
-                    { position:"left bottom" , className: "success" }
-                );
-			}
-    	});
+        if($("#add-folder-" + this.props.service).css('borderColor') === 'rgb(0, 128, 0)'){
+    		$.ajax({
+        		url: "/" + this.state.service + "_create_folder/" + this.state.foldersPath.replace("/folders/", "") + "/" +  $('#folder-name-'+this.state.service).val(),
+        		type: "post",
+    			success: function(data){
+                    $('#add-folder-'+that.state.service).css('borderColor', 'black');
+                    $('#folder-name-'+that.state.service).val('');
+                    that.hardRefresh();
+                    $.notify(
+                        "Added folder: '" + data.name + "'",
+                        { position:"left bottom" , className: "success" }
+                    );
+    			}
+        	});
+        }
 	},
 
 
@@ -105,9 +180,9 @@ var FoldersContainer = React.createClass({
         		url: "/" + that.state.service + "_delete_item/" + that.state.foldersPath.replace("/folders/", "") + "/"+  itemId,
         		type: "delete",
     			success: function(data){
-                    that.dirtyCheck();
+                    that.hardRefresh();
                     $.notify(
-                      "Deleted",
+                      "Deleted item: '" + data.name + "'",
                       { position:"left bottom",  className: "success" }
                     );
     			}
@@ -122,11 +197,33 @@ var FoldersContainer = React.createClass({
 	},
 
 	render() {
+        var myLeft = { textAlign: 'left', float: 'left', display: 'inline-block'}
+        var myRight = { textAlign: 'right', float: 'right', display: 'inline-block'}
+
+
 		return 	<div>
-                    <h3 className={"current-path-" + this.state.path} >{this.state.path}</h3>
-                    <h3>{((this.state.used_space/this.state.total_space) * 100).toFixed(2) + "%"}</h3>
-			   		<Folders addFolder={this.addFolder} deleteItem={this.deleteItem}
-							 goBack={this.goBack} getChildren={this.getChildren}
+                    <div className="service-title">
+                        <h1> {this.props.service} </h1>
+                        <hr/>
+                    </div>
+                    <div style={myRight} className="col-md-12 service-heading">
+                        <div className="other-buttons">
+                            <button className="menu-button" onClick={this.goBack}>
+                                Back
+                            </button>
+                            <button className="menu-button" onClick={this.deleteItem }>
+                                Delete Item
+                            </button>
+                            <button className="menu-button" data-toggle="modal" data-target={'#uploadFile-'+this.state.service}>Upload File</button>
+                        </div>
+                        <div style={myLeft}  id={"add-folder-" + this.props.service} className="add-folder">
+                            <button type="button" className="menu-button folder-submit" onClick={this.addFolder}>
+                                <span className="glyphicon glyphicon-plus-sign"/>
+                            </button>
+                            <input type="text" id={"folder-name-" + this.props.service } className="folder-name" onChange={this.checkName}/>
+                        </div>
+                    </div>
+			   		<Folders path={this.state.path} used_space={this.state.used_space} total_space={this.state.total_space} getChildren={this.getChildren}
 							 downloadFile={this.downloadFile} folders={this.state.folders}
 							 user_files={this.state.user_files} service={this.state.service}/>
 				</div>

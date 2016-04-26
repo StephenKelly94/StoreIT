@@ -7,20 +7,10 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-	<%= render 'layouts/header' %>
-    <div class="container">
-        <!-- Handling devise passing non-optimal paramaters -->
-        <% flash.each do |key, value| %>
-          <% if ((key == "danger") || (key == "warning") || (key == "info") || (key == "success")) %>
-            <div class="alert alert-<%= key %>"><%= value %>
-          <% else %>
-            <div class="alert alert-danger"><%= value %>
-          <% end %>
-              <button class="close" data-dismiss="alert">×</button>
-            </div>
-        <% end %>
-    	<%= yield %>
-    </div>
-<%= render 'layouts/footer' %>
+    <%= render 'layouts/error_messages' %>
+
+	<%= yield %>
+
+    <%= render 'layouts/footer' %>
 </body>
 </html>

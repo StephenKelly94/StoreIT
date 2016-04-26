@@ -1,14 +1,17 @@
 class StaticPagesController < ApplicationController
   def home
   	if current_user
-        if dropbox_root = Folder.roots.find_by(name: "Dropbox_Root")
-  		    @dropbox_root = dropbox_root
+        dropbox_root = Folder.roots.where(name: "Dropbox_Root", user_id: current_user.id)
+        onedrive_root = Folder.roots.find_by(name: "Onedrive_Root", user_id: current_user.id)
+        googledrive_root = Folder.roots.find_by(name: "Googledrive_Root", user_id: current_user.id)
+        if dropbox_root.first
+            @dropbox_root = dropbox_root.first.id
         end
-        if onedrive_root = Folder.roots.find_by(name: "Onedrive_Root")
-            @onedrive_root = onedrive_root
+        if onedrive_root
+            @onedrive_root = onedrive_root.id
         end
-        if googledrive_root = Folder.roots.find_by(name: "Googledrive_Root")
-            @googledrive_root = googledrive_root
+        if googledrive_root
+            @googledrive_root = googledrive_root.id
         end
   	end
   end
